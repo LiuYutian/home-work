@@ -32,6 +32,10 @@ _.prototype = {
         this.collection = result;
         return this;
     },
+    mapValue: function(fun) {
+        _.mapValue(this.collection,fun);
+        return this;
+    },
     filter:function(fun) {
         var result = [];
         this.each(function(n, i) {
@@ -99,19 +103,8 @@ _.prototype = {
         return this;
     },
     range:function(a, b) {
-        var result = [];
-        if(a != b) {
-            var step = Math.abs(b - a) / (b - a);
-            var count = (b - a) / step;
-
-            for(var i = 0; i <= count; i++) {
-                var item = a + i *step;
-                result.push(item);
-            }
-        }else {
-            result.push(a);
-        }
-        return result;
+        this.collection = _.range(a, b);
+        return this;
     },
     exist:function(element) {
         var result = false;
@@ -154,6 +147,21 @@ _.prototype = {
         return this.collection;
     }
 }
+_.range = function(a, b) {
+    var result = [];
+    if(a != b) {
+        var step = Math.abs(b - a) / (b - a);
+        var count = (b - a) / step;
+
+        for(var i = 0; i <= count; i++) {
+            var item = a + i *step;
+            result.push(item);
+        }
+    }else {
+        result.push(a);
+    }
+    return result;
+}
 _.num_to_letter = function(n){
     var f = ["","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p",
     "q","r","s","t","u","v","w","x","y","z"];
@@ -191,4 +199,12 @@ _.rank = function(collection, fun) {
     });
     return array;
 }
+_.mapValue = function (collection,fun) {
+    each(collection,function(value,key) {
+        value = fun(value,key);
+        collection[key] = value;
+    });
+    return collection;
+}
+
 module.exports = _;
